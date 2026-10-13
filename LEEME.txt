@@ -1,0 +1,27 @@
+LNBF PASS — paquete inicial
+============================
+
+CONTENIDO
+- index.html: miniweb adaptable a celulares con invitación pública y pase visual.
+
+IMPORTANTE
+Esta es una versión visual de presentación. No guarda invitaciones en una base central,
+no valida códigos y no registra entradas. El folio y las barras son decorativos y no
+deben presentarse como códigos escaneables ni como control de acceso.
+
+PUBLICAR HOY CON NETLIFY DROP
+1. Abre https://app.netlify.com/drop en un navegador.
+2. Inicia sesión o crea una cuenta si te lo solicita.
+3. Descomprime el archivo ZIP en tu computadora.
+4. Arrastra la carpeta que contiene index.html a la zona de carga de Netlify Drop.
+5. Netlify generará una URL pública HTTPS. Ábrela desde un teléfono y prueba el flujo.
+6. Envíame esa URL pública y podré generar el QR general que apunte al sitio publicado.
+
+ANTES DE DIFUNDIR
+- Reemplaza las opciones genéricas por partidos, fechas y sede confirmados.
+- Añade logotipos oficiales únicamente si tienes autorización y los archivos correctos.
+- El QR general debe apuntar a la URL HTTPS final de Netlify, no a un archivo local.
+
+PARA UNA VERSIÓN CON CONTROL REAL
+Hace falta conectar una base de datos y un servidor que emita identificadores únicos y
+valide el primer uso. Este paquete no implementa esa función.
