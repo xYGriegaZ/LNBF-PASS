@@ -17,6 +17,7 @@ footer{border-top:1px solid var(--line);margin-top:28px;padding-top:18px;color:#
 .hidden{display:none!important}.ticket{max-width:520px;margin:28px auto;background:#f8f7f2;color:#17171b;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px #0008}.ticket-head{background:#17171b;color:#f8f7f2;padding:22px}.ticket-head .brand{font-size:14px}.ticket-body{padding:24px}.ticket-kicker{color:#8a6b27;font-size:11px;letter-spacing:.17em;font-weight:900}.ticket h2{font-size:30px;line-height:1.05;margin:8px 0 18px}.ticket .meta{display:grid;grid-template-columns:1fr 1fr;gap:12px}.meta div{border-top:1px solid #ddd;padding-top:8px}.meta small{display:block;color:#666;font-size:11px;text-transform:uppercase;letter-spacing:.08em}.meta strong{display:block;margin-top:3px}.folio{margin-top:20px;background:#eeeae0;border-radius:10px;padding:12px;font-weight:800;letter-spacing:.08em}.barcode{height:56px;margin-top:15px;background:repeating-linear-gradient(90deg,#17171b 0 2px,transparent 2px 4px,#17171b 4px 5px,transparent 5px 8px,#17171b 8px 12px,transparent 12px 14px,#17171b 14px 15px,transparent 15px 19px);border-bottom:4px solid #f8f7f2}.smallprint{font-size:11px;color:#666;margin-top:12px}.ticket-actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 0}.ticket-actions button{flex:1}
 @media(max-width:680px){.grid{grid-template-columns:1fr}.hero{padding-top:30px}.card{padding:18px}.top{align-items:flex-start}.tag{text-align:right}}
 @media print{body{background:white}.top,.hero,.grid,footer,.ticket-actions{display:none!important}.ticket{box-shadow:none;margin:0 auto;border:1px solid #ddd}}
+.match-preview{margin-top:16px;padding:15px;border:1px solid var(--line);border-radius:14px;background:#101014}.match-teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;text-align:center}.match-team{font-weight:850}.team-logo{width:64px;height:64px;margin:0 auto 7px;border-radius:50%;border:1px solid #4a4a55;background:#19191f;display:grid;place-items:center;overflow:hidden;color:var(--gold);font-size:12px;font-weight:900}.team-logo img{width:100%;height:100%;object-fit:contain}.team-logo span{display:none}.seal img{width:100%;height:100%;object-fit:cover;border-radius:50%}.versus{color:var(--gold);font-weight:900}.match-facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;font-size:13px}.match-facts div{border-top:1px solid var(--line);padding-top:7px}.match-facts small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em}.ticket-match{margin:18px 0;padding:14px;background:#eeeae0;border-radius:12px}.ticket-match .team-logo{border-color:#c9c3b4;background:#fff;color:#80631f}.ticket-match .match-facts div{border-color:#d6d0c4}
 </style>
 </head>
 <body>
@@ -30,9 +31,10 @@ footer{border-top:1px solid var(--line);margin-top:28px;padding-top:18px;color:#
         <form id="passForm">
           <label for="event">Partido / etapa</label>
           <select id="event" required>
-            <option value="Semifinales LNBF">Semifinales LNBF</option>
-            <option value="Finales LNBF">Finales LNBF</option>
+            <option value="semi1">Semifinal 1 · Alfareras vs Legendarias</option>
+            <option value="semi2">Semifinal 2 · Luminarias vs Cajeteras</option>
           </select>
+          <div class="match-preview" id="matchPreview" aria-live="polite"></div>
           <label for="guest">Nombre del invitado (opcional)</label>
           <input id="guest" maxlength="70" placeholder="Nombre y apellido">
           <button class="primary" type="submit">Ver mi pase digital →</button>
@@ -40,7 +42,7 @@ footer{border-top:1px solid var(--line);margin-top:28px;padding-top:18px;color:#
         <div class="note">Este pase es una invitación digital de presentación. Los datos de esta versión no se envían ni se guardan en una base central.</div>
       </div>
       <aside class="card">
-        <div class="seal">LNBF</div><div class="eyebrow">Acceso · Experiencia · Básquetbol</div>
+        <div class="seal"><img src="assets/logos/lnbf.jpg" alt="Logotipo de LNBF"></div><div class="eyebrow">Acceso · Experiencia · Básquetbol</div>
         <h2>Una invitación a la emoción</h2>
         <p class="sub">Presenta tu pase digital al llegar al evento.</p>
         <div class="features">
@@ -57,6 +59,7 @@ footer{border-top:1px solid var(--line);margin-top:28px;padding-top:18px;color:#
       <div class="ticket-head"><div class="brand">LNBF <span style="color:#d8b66a">PASS</span></div><div style="margin-top:18px;color:#d8b66a;font-size:11px;letter-spacing:.18em;font-weight:800">INVITACIÓN DIGITAL</div><div style="font-size:13px;color:#ccc;margin-top:5px">Liga Nacional de Básquetbol Femenil</div></div>
       <div class="ticket-body"><div class="ticket-kicker">PASE DE INVITADO</div><h2 id="ticketEvent">Semifinales LNBF</h2>
         <div class="meta"><div><small>Invitado</small><strong id="ticketGuest">Invitado LNBF</strong></div><div><small>Tipo de pase</small><strong>Cortesía</strong></div></div>
+        <div class="ticket-match" id="ticketMatch"></div>
         <div class="folio" id="ticketFolio">FOLIO LNBF-000000</div><div class="barcode" aria-label="Elemento gráfico decorativo, no escaneable"></div>
         <div class="smallprint">Presenta esta pantalla al personal del evento. Fecha, sede y condiciones de acceso serán comunicadas por la organización.</div>
       </div>
@@ -68,10 +71,16 @@ footer{border-top:1px solid var(--line);margin-top:28px;padding-top:18px;color:#
 </div>
 <script>
 const landing=document.getElementById('landing'), pass=document.getElementById('pass');
+const matches={semi1:{stage:'Semifinal 1',teams:['Alfareras','Legendarias'],logos:['alfareras.jpg','legendarias.jpg'],city:'Dolores Hidalgo',date:'Sábado 17 de octubre de 2026',time:'14:00'},semi2:{stage:'Semifinal 2',teams:['Luminarias','Cajeteras'],logos:['luminarias.jpg','cajeteras.jpg'],city:'Valle de Santiago',date:'Domingo 18 de octubre de 2026',time:'14:00'}};
+function matchMarkup(match){const team=(name,logo)=>`<div class="match-team"><div class="team-logo"><img src="assets/logos/${logo}" alt="Logotipo de ${name}" onerror="this.remove();this.nextElementSibling.style.display='block'"><span>${name.slice(0,2).toUpperCase()}</span></div>${name}</div>`;return `<div class="match-teams">${team(match.teams[0],match.logos[0])}<div class="versus">VS</div>${team(match.teams[1],match.logos[1])}</div><div class="match-facts"><div><small>Sede</small><strong>${match.city}</strong></div><div><small>Fecha</small><strong>${match.date}</strong></div><div><small>Hora</small><strong>${match.time} h</strong></div><div><small>Etapa</small><strong>${match.stage}</strong></div></div>`}
+function selectedMatch(){return matches[document.getElementById('event').value]}
+function updateMatchPreview(){document.getElementById('matchPreview').innerHTML=matchMarkup(selectedMatch())}
+document.getElementById('event').addEventListener('change',updateMatchPreview);updateMatchPreview();
 function makeFolio(){return 'LNBF-'+Math.random().toString(36).slice(2,8).toUpperCase();}
 document.getElementById('passForm').addEventListener('submit',e=>{
  e.preventDefault();
- document.getElementById('ticketEvent').textContent=document.getElementById('event').value;
+ const match=selectedMatch();document.getElementById('ticketEvent').textContent=match.stage;
+ document.getElementById('ticketMatch').innerHTML=matchMarkup(match);
  document.getElementById('ticketGuest').textContent=document.getElementById('guest').value.trim()||'Invitado LNBF';
  document.getElementById('ticketFolio').textContent='FOLIO '+makeFolio();
  landing.classList.add('hidden');pass.classList.remove('hidden');window.scrollTo(0,0);
